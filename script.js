@@ -1,7 +1,17 @@
 'use script'
 
-let money = +prompt("Ваш бюджет на місяць?", ''),
+let money, time;
+
+function start() {
+	money = +prompt("Ваш бюджет на місяць?", '');
 	time = prompt('Введіть дату в форматі YYYY-MM-DD', '');
+
+	while(isNaN(money) || money == "" || money == null) {
+		money = +prompt("Ваш бюджет на місяць?", '');		
+	}
+}
+
+start();
 
 let appData = {
 	budget: money,
@@ -9,49 +19,69 @@ let appData = {
 	optionalExpenses: {},
 	income: [],
 	timeData: time,
-	savings: false
+	savings: true
 };
 
-// for (let i = 0; i < 2; i++) {
-// 	let a = prompt("Введіть обов'язкову статттю трат в цьому місяці", ''),
-// 		b = prompt("В яку суму обійдеться?", '');
-		
-// if (typeof(a) === 'string' && typeof(a) != null && typeof(b) != null
-// 	&& a != '' && b != '' && a.length< 50 ) {
-// 	console.log('done');	
-// 	appData.expenses[a] = b;
-// } else {
-// 	console.log("Bad result!");
-// 	i--;
-// 	};
-// };
+function chooseExpenses() {
+	for (let i = 0; i < 2; i++) {
+		let a = prompt("Введіть обов'язкову статттю трат в цьому місяці", ''),
+			b = prompt("В яку суму обійдеться?", '');
+			
+	if (typeof(a) === 'string' && typeof(a) != null && typeof(b) != null
+		&& a != '' && b != '' && a.length < 50 ) {
+		console.log('done');	
+		appData.expenses[a] = b;
+	} else {
+		i--;
+		}
+	}
+}
+chooseExpenses();
 
-let i = 0;
-while (i < 2) {
-	let a = prompt("Введіть обов'язкову статттю трат в цьому місяці", ''),
-		b = prompt("В яку суму обійдеться?", '');
-		i++;
+function chooseOptExpenses() {
+	for (let i = 0; i < 3; i++) {
+		let a = prompt("Введіть необов'язкову статттю трат в цьому місяці", ''),
+			b = prompt("В яку суму обійдеться?", '');
+			
+	if (typeof(a) === 'string' && typeof(a) != null && typeof(b) != null
+		&& a != '' && b != '' && a.length < 50 ) {
+		console.log('done');	
+		appData.optionalExpenses[a] = b;
+	} else {
+		i--;
+		}
+	}
+}
+chooseOptExpenses();
 
-if (typeof(a) === 'string' && typeof(a) != null && typeof(b) != null
-	&& a != '' && b != '' && a.length< 50 ) {
-	console.log('done');	
-	appData.expenses[a] = b;
-} else {
-	console.log("Bad result!");
-	i--;
-	};
-};
+function detectDayBudget () {
+	appData.moneyPerDay = (appData.budget / 30).toFixed();
+    alert("Щоденний бюджет: " + appData.moneyPerDay);
+}
+detectDayBudget();
 
-appData.moneyPerDay = appData.budget / 30;
+function detectLevel() {
+	if(appData.moneyPerDay < 100) {
+		console.log("Мінімальний рівень");
+	} else if (appData.moneyPerDay > 100 && appData.moneyPerDay < 2000) {
+		console.log("Середній рівень");
+	} else if (appData.moneyPerDay > 2000) {
+		console.log("Високий рівень");
+	} else {
+		console.log("Помилка!");
+	}
+}
+detectLevel();
 
-alert("Щоденний бюджет: " + appData.moneyPerDay);
+function checkSavings() {
+	if (appData.savings == true) {
+		let save = +prompt("Яка сума збережень?"),
+			percent = +prompt("Під який відсоток?");
+			
+		appData.monthIncome = save/100/12*percent;
+		alert("Дохід в місяць з вашого депозиту: " + appData.monthIncome);
+	}
+}
 
-if(appData.moneyPerDay < 100) {
-	console.log("Мінімальний рівень");
-} else if (appData.moneyPerDay > 100 && appData.moneyPerDay < 2000) {
-	console.log("Середній рівень");
-} else if (appData.moneyPerDay > 2000) {
-	console.log("Високий рівень");
-} else {
-	console.log("Помилка!");
-};
+checkSavings();
+
